@@ -4,7 +4,7 @@ ArrayList<Term> terms = new ArrayList<Term>();
 
 float time = 0;
 float timeStep = 0.002;
-int maxIndex = 600;
+int maxIndex = 1000;
 int pointsPerFrame = 5;
 
 float scale = 250;
@@ -12,19 +12,20 @@ float scale = 250;
 void setup() {
   size(800, 800);
   println("Loading image...");
-  PImage img = loadImage("img.png");
+  PImage img = loadImage("../img/img01.png");
   println("Image loaded. Gathering points...");
   ArrayList<Point> inputPoints = getBlackPoints(img);
   println("Points gathered. Generating path...");
   path = getPath(inputPoints);
+  scalePath(path, img);
   println("Path generated. Generating coefficients...");
   terms.add(new Term(0));
-  terms.get(0).makeCoefficient(path, img.width, img.height);
+  terms.get(0).makeCoefficient(path);
   for (int i = 1; i <= maxIndex; i++) {
     Term a = new Term(i);
     Term b = new Term(-i);
-    a.makeCoefficient(path, img.width, img.height);
-    b.makeCoefficient(path, img.width, img.height);
+    a.makeCoefficient(path);
+    b.makeCoefficient(path);
     terms.add(a);
     terms.add(b);
   }
@@ -168,7 +169,6 @@ ArrayList<Point> getPath(ArrayList<Point> points) {
         }
       }
     }
-    println(stem1.size()+"   "+stem2.size() + "   " + points.size());
     if (stem1.size() == s1size && stem2.size() == s2size) {
       break;
     }
@@ -178,6 +178,12 @@ ArrayList<Point> getPath(ArrayList<Point> points) {
     path.add(stem2.get(i));
   }
   return path;
+}
+
+void scalePath(ArrayList<Point> path, PImage img) {
+  for(Point p : path) {
+    p.scaleCoords(img.width, img.height);
+  }
 }
 
 int indexOfPoint(ArrayList<Point> blackPoints, PVector target) {
@@ -200,7 +206,6 @@ ArrayList<Point> getBlackPoints(PImage im) {
     if (brightness(im.pixels[i]) <= 32) {
       float pointX = i%im.width;
       float pointY = i/im.width;
-      println(pointX + ", " + pointY);
       blackPoints.add(new Point(pointX, pointY));
     }
   }
