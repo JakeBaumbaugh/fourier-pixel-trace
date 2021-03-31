@@ -10,4 +10,9 @@ class Point {
   public Point(PVector xy) {
     coords = xy;
   }
+  
+  void scaleCoords(float imgW, float imgH) {
+    coords.x = map(coords.x, 0, imgW, -1, 1);
+    coords.y = map(coords.y, 0, imgH, -1, 1);
+  }
 }

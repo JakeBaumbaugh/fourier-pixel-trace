@@ -6,6 +6,11 @@ class ComplexNum {
     real = a;
     imag = b;
   }
+  
+  public void addSelf(ComplexNum other) {
+    real += other.real;
+    imag += other.imag;
+  }
 }
 
 public ComplexNum addComplex (ComplexNum c1, ComplexNum c2) {
