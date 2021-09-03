@@ -1,6 +1,7 @@
 let redcolor;
 let prevX, prevY;
 let indexPath;
+let i = 0;
 
 function setup() {
     redcolor = color(218, 82, 67);
@@ -9,9 +10,6 @@ function setup() {
     frameRate(120);
     stroke(redcolor);
     strokeWeight(3);
-}
-  
-function draw() {
 }
 
 function handleMouse(x, y) {
@@ -37,8 +35,11 @@ function generatePath() {
     loadPixels();
     //Find first opaque pixel
     let ind1 = 0;
-    while(pixels[4*ind1+3] == 0) {
+    while(pixels[4*ind1+3] == 0 && ind1<width*height) {
         ind1++;
+    }
+    if(ind1 == width*height) {
+        return;
     }
     // Breadth-first search to populate the arrays
     let arr1 = [], arr2 = [];
@@ -49,19 +50,19 @@ function generatePath() {
         tempind = queue1.pop();
         if(tempind && pixels[4*tempind+3]!=0 && !arr1.includes(tempind) && !arr2.includes(tempind)) {
             arr1.push(tempind);
-            queue1.push(tempind-1);
-            queue1.push(tempind-width);
-            queue1.push(tempind+1);
-            queue1.push(tempind+width);
+            queue1.unshift(tempind-1);
+            queue1.unshift(tempind-width);
+            queue1.unshift(tempind+1);
+            queue1.unshift(tempind+width);
         }
         // Explore pixel on top of queue2
         tempind = queue2.pop();
         if(tempind && pixels[4*tempind+3]!=0 && !arr1.includes(tempind) && !arr2.includes(tempind)) {
             arr2.push(tempind);
-            queue2.push(tempind-width);
-            queue2.push(tempind-1);
-            queue2.push(tempind+1);
-            queue2.push(tempind+width);
+            queue2.unshift(tempind-width);
+            queue2.unshift(tempind-1);
+            queue2.unshift(tempind+1);
+            queue2.unshift(tempind+width);
         }
     }
     indexPath = arr1.concat(arr2.reverse());
