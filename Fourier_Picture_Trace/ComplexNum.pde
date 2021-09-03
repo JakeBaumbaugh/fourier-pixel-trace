@@ -11,6 +11,11 @@ class ComplexNum {
     real += other.real;
     imag += other.imag;
   }
+  
+  public void multSelf(float other) {
+    real *= other;
+    imag *= other;
+  }
 }
 
 public ComplexNum addComplex (ComplexNum c1, ComplexNum c2) {

@@ -13,8 +13,9 @@ class Term {
       float theta = -TWO_PI*index*u/path.size();
       ComplexNum func = new ComplexNum(path.get(u).coords.x, path.get(u).coords.y);
       ComplexNum eTerm = new ComplexNum(cos(theta), sin(theta));
-      ComplexNum sumTerm = multComplex((float)1/path.size(), multComplex(func, eTerm));
-      c.addSelf(sumTerm);
+      ComplexNum fullTerm = multComplex(func, eTerm);
+      c.addSelf(fullTerm);
     }
+    c.multSelf((float)1/path.size());
   }
 }
